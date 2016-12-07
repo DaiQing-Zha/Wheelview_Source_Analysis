@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">WheelView_Source_Analysis</string>
+
+    <string name="xml_comm_sure">确认</string>
+    <string name="xml_comm_cancel">取消</string>
+    <string name="comm_cancel">取消</string>
+</resources>
