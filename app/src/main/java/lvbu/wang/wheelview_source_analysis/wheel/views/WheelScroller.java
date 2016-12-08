@@ -75,6 +75,7 @@ public class WheelScroller {
 	// Scrolling
 	private GestureDetector gestureDetector;
 	private Scroller scroller;
+	/*  Y轴 所在的上一个位置 */
 	private int lastScrollY;
 	private float lastTouchedY;
 	private boolean isScrollingPerformed;

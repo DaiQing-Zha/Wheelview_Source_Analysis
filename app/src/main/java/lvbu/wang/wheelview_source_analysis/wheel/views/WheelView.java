@@ -79,9 +79,10 @@ public class WheelView extends View {
 	// Scrolling
 	private WheelScroller scroller;
 	private boolean isScrollingPerformed;
+	/* 滚动的距离 */
 	private int scrollingOffset;
 
-	// Cyclic
+	/* Cyclic 是否循环 */
 	boolean isCyclic = false;
 
 	// Items layout
@@ -153,6 +154,8 @@ public class WheelView extends View {
 
 		@Override
 		public void onScroll(int distance) {
+
+			Log.e("mainWheel1","distance = " + distance);
 			doScroll(distance);
 
 			int height = getHeight();
@@ -559,11 +562,10 @@ public class WheelView extends View {
 		int heightSize = MeasureSpec.getSize(heightMeasureSpec);
 
 		Log.e("mainWheel","widthMode = " + widthMode + " heightMode = " + heightMode + " widthSize = " + DensityUtil.px2dp(mContext,widthSize) + " heightSize = " + DensityUtil.px2dp(mContext,heightSize));
-		Log.e("mainWheel"," getWidth = " + DensityUtil.px2dp(mContext,getWidth()) + "getHeight = " + DensityUtil.px2dp(mContext,getHeight()));
+		Log.e("mainWheel","getWidth = " + DensityUtil.px2dp(mContext,getWidth()) + " getHeight = " + DensityUtil.px2dp(mContext,getHeight()));
 		buildViewForMeasuring();
-
+		buildViewForMeasuring();
 		int width = calculateLayoutWidth(widthSize, widthMode);
-
 		int height;
 		if (heightMode == MeasureSpec.EXACTLY) {
 			height = heightSize;
@@ -695,17 +697,26 @@ public class WheelView extends View {
 	 */
 	private void doScroll(int delta) {
 		scrollingOffset += delta;
-
 		int itemHeight = getItemHeight();
+		/* 计算滚动的条目数；滚动的条目数 = 滚动的值 / 单个条目的高度 */
 		int count = scrollingOffset / itemHeight;
+		/**
+		 * pos是滚动后的目标元素位置
+		 * 计算当前位置；当前位置 = 当前条目数 - 滚动的条目数
+		 * 注意：滚动的条目数可正可负getHeight =
+		 */
 
 		int pos = currentItem - count;
 		int itemCount = viewAdapter.getItemsCount();
-
 		int fixPos = scrollingOffset % itemHeight;
+		Log.e("mainWheel","scrollingOffset = " + scrollingOffset + " delta = " + delta + " fixPos = " + fixPos);
+		/* 如果 剩余的滚动高度 小于或等于 半个item的高度，那么，我们将那 剩余的滚动高度 设置为0，不认为它滑动了一个item */
 		if (Math.abs(fixPos) <= itemHeight / 2) {
 			fixPos = 0;
 		}
+		/**
+		 * 如果循环 并且 当前的条目数 大于 0
+		 */
 		if (isCyclic && itemCount > 0) {
 			if (fixPos > 0) {
 				pos--;
