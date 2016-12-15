@@ -12,5 +12,5 @@
             <corners android:radius="4dip"/>
             <solid android:color="#ffffff"/>
         </shape>
-    </item>   
+    </item>
 </selector>

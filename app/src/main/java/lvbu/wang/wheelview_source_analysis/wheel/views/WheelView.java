@@ -685,7 +685,6 @@ public class WheelView extends View {
 			}
 			break;
 		}
-
 		return scroller.onTouchEvent(event);
 	}
 
@@ -718,6 +717,12 @@ public class WheelView extends View {
 		 * 如果循环 并且 当前的条目数 大于 0
 		 */
 		if (isCyclic && itemCount > 0) {
+			/**
+			 * fixPos跟scrollingOffset有关，而scrollingOffset跟delta有关，delta来自于distance
+			 * distance = eventGetY() - mLastTouchedY
+			 * 当 fixPos > 0时，表示向下滑动
+			 * 当 fixPos < 0时，表示向上滑动
+			 */
 			if (fixPos > 0) {
 				pos--;
 				count++;
@@ -730,30 +735,30 @@ public class WheelView extends View {
 				pos += itemCount;
 			}
 			pos %= itemCount;
-		} else {
-			//
+		} else {	//不可循环
 			if (pos < 0) {
 				count = currentItem;
-				pos = 0;
+                Log.e("mainWheel_1","count = " + count + " pos = " + pos);
+                pos = 0;
 			} else if (pos >= itemCount) {
 				count = currentItem - itemCount + 1;
 				pos = itemCount - 1;
 			} else if (pos > 0 && fixPos > 0) {
 				pos--;
 				count++;
+				Log.e("mainWheel_1","count1 = " + count + " pos1 = " + pos + " fixPos = " + fixPos);
 			} else if (pos < itemCount - 1 && fixPos < 0) {
 				pos++;
 				count--;
+				Log.e("mainWheel_1","count2 = " + count + " pos2 = " + pos + " fixPos = " + fixPos);
 			}
 		}
-
 		int offset = scrollingOffset;
 		if (pos != currentItem) {
 			setCurrentItem(pos, false);
 		} else {
 			invalidate();
 		}
-
 		// update offset
 		scrollingOffset = offset - count * itemHeight;
 		if (scrollingOffset > getHeight()) {
